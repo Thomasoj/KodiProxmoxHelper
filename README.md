@@ -4,12 +4,12 @@ Set of scripts to help in deployment of containers into Proxmox.
 
 based on great work of https://github.com/tteck/Proxmox
 
-# Kodi Media Manager LXC 
+# Kodi Media Manager LXC
 
 ## To create a new Proxmox Kodi Media Manager, run the following in the Proxmox Shell.
 
 ```yaml
-bash -c "$(wget -qLO - https://raw.githubusercontent.com/mrrudy/proxmoxHelper/main/ct/kodi-v1.sh)"
+bash -c "$(wget -qLO - https://raw.githubusercontent.com/Thomasoj/KodiProxmoxHelper/main/ct/kodi-v1.sh)"
 ```
 Kodi should be attached to TTY7 console
 

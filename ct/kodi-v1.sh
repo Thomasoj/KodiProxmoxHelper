@@ -65,7 +65,7 @@ fi
 }
 function default_settings() {
 		echo -e "${DGN}Using ${var_os} Version: ${BGN}${var_version}${CL}"
-		
+
     echo -e "${DGN}Using Container Type: ${BGN}Unprivileged${CL}"
     CT_TYPE="1"
 		echo -e "${DGN}Using Root Password: ${BGN}Automatic Login${CL}"
@@ -188,7 +188,7 @@ if [ $exitstatus = 0 ]; then
 else
     VLAN=",tag=$VLAN1"
     echo -e "${DGN}Using Vlan: ${BGN}$VLAN1${CL}"
-  fi  
+  fi
 fi
 if (whiptail --title "ADVANCED SETTINGS COMPLETE" --yesno "Ready to create ${APP} LXC?" --no-button Do-Over 10 58); then
     echo -e "${RD}Creating a ${APP} LXC using the above advanced settings${CL}"
@@ -212,7 +212,7 @@ fi
 }
 clear
 start_script
-if [ "$CT_TYPE" == "1" ]; then 
+if [ "$CT_TYPE" == "1" ]; then
  FEATURES="nesting=1,keyctl=1"
  else
  FEATURES="nesting=1"
@@ -263,7 +263,7 @@ lxc.mount.entry: /dev/tty7 dev/tty7 none bind,optional,create=file
 # all input devices
 lxc.cgroup2.devices.allow: c 13:* rwm
 lxc.mount.entry: /dev/input dev/input none bind,optional,create=dir
-# sound 
+# sound
 lxc.cgroup2.devices.allow: c 116:* rwm
 lxc.mount.entry: /dev/snd dev/snd none bind,optional,create=dir
 EOF
@@ -273,7 +273,7 @@ lxc.idmap: u 0 100000 65536
 EOF
     #TODO internalize code to generate mapping instad of using external python script
     LXC_SUB_CONF=$(python3 -c "$(wget -qLO - https://raw.githubusercontent.com/ddimick/proxmox-lxc-idmapper/master/run.py)" \
-      ${VIDEO_GID}=$(getent group video | cut -d: -f3) ${RENDER_GID}=$(getent group render | cut -d: -f3) ${TTY_GID}=$(getent group tty | cut -d: -f3) ${INPUT_GID}=$(getent group input | cut -d: -f3) ${AUDIO_GID}=$(getent group audio | cut -d: -f3)) 
+      ${VIDEO_GID}=$(getent group video | cut -d: -f3) ${RENDER_GID}=$(getent group render | cut -d: -f3) ${TTY_GID}=$(getent group tty | cut -d: -f3) ${INPUT_GID}=$(getent group input | cut -d: -f3) ${AUDIO_GID}=$(getent group audio | cut -d: -f3))
     echo "$LXC_SUB_CONF" | grep 'lxc.idmap: g ' >> $LXC_CONFIG
     # on host add rights to map gids but only if they are not already in the file
     echo "$LXC_SUB_CONF" | sed -n '/subgid/,// { /subgid/! p }' | while read line; do cat /etc/subgid | sed 's/[[:blank:]]*//g' | grep -qxF "$line" || echo $line >> /etc/subgid; done
@@ -304,7 +304,7 @@ msg_info "Starting LXC Container"
 pct start $CTID
 msg_ok "Started LXC Container"
 
-lxc-attach -n $CTID -- bash -c "$(wget -qLO - https://raw.githubusercontent.com/mrrudy/proxmoxHelper/main/setup/$var_install.sh)" || exit
+lxc-attach -n $CTID -- bash -c "$(wget -qLO - https://raw.githubusercontent.com/Thomasoj/KodiProxmoxHelper/main/setup/$var_install.sh)" || exit
 IP=$(pct exec $CTID ip a s dev eth0 | sed -n '/inet / s/\// /p' | awk '{print $2}')
 pct set $CTID -description "# ${APP} LXC"
 msg_ok "Completed Successfully!\n"

@@ -53,7 +53,7 @@ while [ "$(hostname -I)" = "" ]; do
   ((NUM--))
   if [ $NUM -eq 0 ]
   then
-    1>&2 echo -e "${CROSS}${RD} No Network After $RETRY_NUM Tries${CL}"    
+    1>&2 echo -e "${CROSS}${RD} No Network After $RETRY_NUM Tries${CL}"
     exit 1
   fi
 done
@@ -73,19 +73,20 @@ msg_info "Installing Dependencies"
 apt-get install -y curl &>/dev/null
 apt-get install -y sudo &>/dev/null
 apt-get install -y gnupg &>/dev/null
+apt-get install -y software-properties-common &>/dev/null
 msg_ok "Installed Dependencies"
 
-msg_info "Setting Up Hardware Acceleration"  
+msg_info "Setting Up Hardware Acceleration"
 apt-get -y install \
     va-driver-all \
-    ocl-icd-libopencl1 &>/dev/null 
+    ocl-icd-libopencl1 &>/dev/null
 set +e
 alias die=''
 apt-get install --ignore-missing -y beignet-opencl-icd &>/dev/null
 alias die='EXIT=$? LINE=$LINENO error_exit'
 set -e
-    
-msg_ok "Set Up Hardware Acceleration"  
+
+msg_ok "Set Up Hardware Acceleration"
 
 msg_info "Setting Up kodi user"
 useradd -d /home/kodi -m kodi &>/dev/null
@@ -103,6 +104,7 @@ echo "/usr/sbin/lightdm" > /etc/X11/default-display-manager
 msg_ok "Installed lightdm"
 
 msg_info "Installing kodi"
+add-apt-repository -y ppa:team-xbmc/ppa
 apt-get update &>/dev/null
 apt-get install -y kodi &>/dev/null
 set +e
@@ -187,7 +189,7 @@ systemctl daemon-reload
 systemctl restart $(basename $(dirname $GETTY_OVERRIDE) | sed 's/\.d//')
 msg_ok "Customized Container"
   fi
-  
+
 msg_info "Cleaning up"
 apt-get autoremove >/dev/null
 apt-get autoclean >/dev/null
@@ -197,6 +199,3 @@ msg_info "Starting X up"
 systemctl start lightdm
 ln -fs /lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service
 msg_info "Started X"
-
-
-
